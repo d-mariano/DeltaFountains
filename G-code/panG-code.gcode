@@ -26,23 +26,24 @@
 
 (-------------------------------------------------------------------------)
 
-(Motors must already be physically positioned in the middle of their axis)
-G92 X75 Y75 Z75     (Set position to middle of 115mm, no actual movement)
-G01 X100 Y100 Z50   (Tilt down on Z 25mm)
-G04 S2              (Dwell of 2 seconds)
-G01 X50 Y50 Z100    (Tilt down on Y 25mm)
-G04 S2              (Dwell for 2 seconds)
-G01 X75 Y75 Z75     (Level axis)
+; GCode for panning 
+G21                              ;metric is good!
+G90                              ;absolute positioning
+T0                                 ;select new extruder
+G28                               ;go home
+G92 E0                          ;set extruder home
+M104 S230.0                   ;set temperature to 230.0
+G1 X20 Y20 F500            ;Move away from 0.0, so we use the same reset (in the layer code) for each layer
 
-                            ( ----OR---- )
 
-(Motors must already be physically positioned in the middle of their axis)
-X-25 Y-25 Z25 (Tilt down on X 25mm)
-G04 S2        (Dwell for 2 seconds)
-X50 Y50 Z-50  (Tilt down on Y 25mm, plus travel compensation 
-                for previous tilt)
-G04 S2        (Wait 2 seconds)
-X-25 Y-25 Z25 (Level axis)
+G1 F70
+G1 Z0.2 E0 F70
+
+G1 X100 Y100 Z50 E166 F2300 	;tilt down on X
+;G4 S2 				;Dwell of 2 seconds
+G1 X50 Y50 Z100 E167 F2300      ;Tilt down on Y 25mm
+;G4 S2
+G1 X75 Y75 Z75 E168 F2300    ;Level axis	
 
 
 
