@@ -28,9 +28,9 @@
 
 (Motors must already be physically positioned in the middle of their axis)
 G92 X75 Y75 Z75     (Set position to middle of 115mm, no actual movement)
-G01 X125 Y125 Z50   (Tilt down on Z 25mm)
+G01 X100 Y100 Z50   (Tilt down on Z 25mm)
 G04 S2              (Dwell of 2 seconds)
-G01 X50 Y50 Z125    (Tilt down on Y 25mm)
+G01 X50 Y50 Z100    (Tilt down on Y 25mm)
 G04 S2              (Dwell for 2 seconds)
 G01 X75 Y75 Z75     (Level axis)
 
