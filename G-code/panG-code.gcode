@@ -39,11 +39,12 @@ G1 X20 Y20 F500            ;Move away from 0.0, so we use the same reset (in the
 G1 F70
 G1 Z0.2 E0 F70
 
-G1 X100 Y100 Z50 E166 F2300 	;tilt down on X
-;G4 S2 				;Dwell of 2 seconds
-G1 X50 Y50 Z100 E167 F2300      ;Tilt down on Y 25mm
+G1 X75 Y75 Z75
+G1 X100 Y100 Z50 E166 F2300 	;tilt down on Z 25mm
+;G4 S2 				            
+G1 X50 Y50 Z100 E167 F2300      ;Tilt down on XY 25mm
 ;G4 S2
-G1 X75 Y75 Z75 E168 F2300    ;Level axis	
+G1 X75 Y75 Z75 E168 F2300       ;Level axis	
 
 
 
