@@ -36,7 +36,7 @@ public class Controls extends Activity {
 	private Socket socket;
 
     private static final int SERVERPORT = 43000;
-    private static final String SERVER_IP = "192.168.0.1";
+    private static final String SERVER_IP = "10.111.100.201";
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

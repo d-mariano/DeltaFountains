@@ -22,9 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class Functions extends Activity {
 	private ListView list;
@@ -36,8 +34,7 @@ public class Functions extends Activity {
 	
 	private Socket socket;
 	private static final int SERVERPORT = 43000;
-	private static final String SERVER_IP = "192.168.1.1";
-	private static int value = 0;
+	private static final String SERVER_IP = "10.111.100.201";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +49,22 @@ public class Functions extends Activity {
         list.setOnItemClickListener(new OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		value = position;
+                try {
+                    PrintWriter out = new PrintWriter(new BufferedWriter(
+                            new OutputStreamWriter(socket.getOutputStream())),
+                            true);
+                    out.flush();
+                    BufferedReader  in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    String read = in.readLine();
+                    System.out.println("MSG:" + read + "\t\t" + position);  
+
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
         	}
         });
 	}
@@ -90,7 +102,7 @@ public class Functions extends Activity {
 		
 		return position;
 	}
-*/	
+	
     public void onClick(View view) {
         try {
             PrintWriter out = new PrintWriter(new BufferedWriter(
@@ -109,7 +121,7 @@ public class Functions extends Activity {
             e.printStackTrace();
         }
     }
-	
+*/
 	class ClientThread implements Runnable {
 
         @Override
