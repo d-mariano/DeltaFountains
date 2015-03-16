@@ -29,20 +29,20 @@ from printrun import gcoder
 ######################################################
 def sendcommand( command, socket ):
     if ( command == "north" ) :
-        print "Loading \"north.gco\""
-        p.send_now("M23 north.gco")
+        print "Loading \"north.gcoode\""
+        p.send_now("M23 north.gcoode")
         p.send_now("M24")
     elif ( command == "south" ):
-        print "Loading \"south.gco\""
-        p.send_now("M23 south.gco")
+        print "Loading \"south.gcode\""
+        p.send_now("M23 south.gcode")
         p.send_now("M24")
     elif ( command == "east" ):
-        print "Loading \"east.gco\""
-        p.send_now("M23 east.gco")
+        print "Loading \"east.gcode\""
+        p.send_now("M23 east.gcode")
         p.send_now("M24")
     elif ( command == "west" ):
-        print "Loading \"west.gco\""
-        p.send_now("M23 west.gco")
+        print "Loading \"west.gcode\""
+        p.send_now("M23 west.gcode")
         p.send_now("M24")
     elif ( command == "disconnect" ):
         print "Disconnecting from robot..."
@@ -82,7 +82,7 @@ def receiver( socket ):
 # Setup logging to stderr
 setup_logging(sys.stderr)
 # Connect to robot
-p = printcore('/dev/ttyUSB0', 115200)
+p = printcore('/dev/ACM0', 115200)
 # Initialize SD Card
 p.send_now('M21')
 
