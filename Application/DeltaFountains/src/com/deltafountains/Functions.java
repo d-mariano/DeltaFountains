@@ -1,4 +1,18 @@
+/* Functions screen (preprogrammed movements) of the App
+ * Project Delta Fountains
+ */
+
 package com.deltafountains;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,10 +33,18 @@ public class Functions extends Activity {
 										"Small Zig-Zag (N/S)", "Medium Zig-Zag (N/S)", "Large Zig-Zag (N/S)", 
 										"Small Zig-Zag (E/W)", "Medium Zig-Zag (E/W)", "Large Zig-Zag (E/W)" };
 	
+	
+	private Socket socket;
+	private static final int SERVERPORT = 43000;
+	private static final String SERVER_IP = "192.168.1.1";
+	private static int value = 0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_functions);
+		
+		new Thread(new ClientThread()).start();
 		
 		list = (ListView) findViewById(R.id.listView);
         list.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, listview_array));
@@ -29,12 +52,12 @@ public class Functions extends Activity {
         list.setOnItemClickListener(new OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		callFunction(position);
+        		value = position;
         	}
         });
 	}
 
-	void callFunction(int position){
+/*	int callFunction(int position){
 		Toast.makeText(getApplicationContext(), "Function: " + listview_array[position], Toast.LENGTH_SHORT).show();
 		
 		if (position == 0){ //Small Spiral(CLW)
@@ -64,7 +87,44 @@ public class Functions extends Activity {
 		}else{
 			Toast.makeText(getApplicationContext(), "Well that didn't work", Toast.LENGTH_LONG).show();
 		}
+		
+		return position;
 	}
+*/	
+    public void onClick(View view) {
+        try {
+            PrintWriter out = new PrintWriter(new BufferedWriter(
+                    new OutputStreamWriter(socket.getOutputStream())),
+                    true);
+            out.flush();
+            BufferedReader  in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String read = in.readLine();
+            System.out.println("MSG:" + read + "\t\t" + value);  
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+	
+	class ClientThread implements Runnable {
+
+        @Override
+        public void run() {
+
+            try {
+                InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
+                socket = new Socket(serverAddr, SERVERPORT);
+            } catch (UnknownHostException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

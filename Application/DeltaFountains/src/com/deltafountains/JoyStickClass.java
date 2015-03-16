@@ -1,3 +1,7 @@
+/* Supporting class for Controls.java
+ * Project Delta Fountains
+ */
+
 package com.deltafountains;
 
 import android.content.Context;
