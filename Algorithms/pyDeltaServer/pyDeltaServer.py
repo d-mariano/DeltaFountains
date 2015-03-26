@@ -19,6 +19,8 @@ import thread
 import signal
 import os
 
+from time import sleep
+
 from printrun.printcore import printcore
 from printrun.utils import setup_logging
 from printrun import gcoder
@@ -93,22 +95,28 @@ def receiver( socket ):
             input = socket.recv(1024)
             # Srip string of a newline
             input = input.strip( '\n' )
+            print "Recieved: %s\n" % (input)
+            if ( input == "exit" ):
+                p.disconnect()
+                socket.close()
+                print "Client gone...\n"
+                return
+            else:
+                try:
+                    sendcommand( input, socket )
+                except:
+                    print "Client gone...\n"
+                    p.disconnect()
+                    socket.close()
+                    return
         except:
             print "Socket closed"
-        print "Recieved: %s\n" % (input)
-        if ( input == "exit" ):
             p.disconnect()
             socket.close()
             print "Client gone...\n"
             return
-        else:
-            try:
-                sendcommand( input, socket )
-            except:
-                print "Client gone...\n"
-                p.disconnect()
-                socket.close()
-                return
+
+        
 
 
 ####################################################
