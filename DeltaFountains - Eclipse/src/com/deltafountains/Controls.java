@@ -139,8 +139,10 @@ public class Controls extends Activity {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
+                finish();
             } catch (IOException e1) {
                 e1.printStackTrace();
+                finish();
             }
         }
 	}
