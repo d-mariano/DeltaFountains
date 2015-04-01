@@ -7,7 +7,6 @@ package com.deltafountains;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +14,7 @@ import android.widget.ImageButton;
 
 public class MainActivity extends Activity {
 
-	Button controls, functions;
+	Button controls, functions, settings;
 	ImageButton support;
 	
 	@Override
@@ -25,6 +24,7 @@ public class MainActivity extends Activity {
 		
 		controls = (Button) findViewById(R.id.controlsButton);
 		functions = (Button) findViewById(R.id.functionsButton);
+		settings = (Button) findViewById(R.id.settingsButton);
 		support = (ImageButton) findViewById(R.id.questionImageButton);
 		
 		controls.setOnClickListener(new View.OnClickListener(){
@@ -47,13 +47,13 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		
+		settings.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v){
+				Intent intent = new Intent(getApplicationContext(), Settings.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	@Override

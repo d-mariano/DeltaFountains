@@ -14,7 +14,6 @@ import java.net.UnknownHostException;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +21,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class Functions extends Activity {
 	private ListView list;
@@ -31,10 +29,9 @@ public class Functions extends Activity {
 										"Small Zig-Zag (N/S)", "Medium Zig-Zag (N/S)", "Large Zig-Zag (N/S)", 
 										"Small Zig-Zag (E/W)", "Medium Zig-Zag (E/W)", "Large Zig-Zag (E/W)" };
 	
-	
 	private Socket socket;
-	private static final int SERVERPORT = 43000;
-	private static final String SERVER_IP = "192.168.0.27";
+	private final int SERVERPORT = Settings.portValue;
+	private final String SERVER_IP = Settings.ipValue;
 	private static int value = 0;
     PrintWriter out = null;
     BufferedReader in = null;
@@ -60,7 +57,7 @@ public class Functions extends Activity {
         });
         
 		back = (ImageButton) findViewById(R.id.backButtonFunctions);
-        back.setOnClickListener(new View.OnClickListener(){ //Second button goes to the second activity
+        back.setOnClickListener(new View.OnClickListener(){ //Back to main
         	@Override
         	public void onClick(View v){
         		try {
@@ -85,28 +82,13 @@ public class Functions extends Activity {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Don't know host: " + SERVER_IP, Toast.LENGTH_SHORT).show();
+                finish();
             } catch (IOException e1) {
                 e1.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Couldn't get IO for the connection to: " + SERVER_IP, Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
-	
-	/*protected void onDestroy(){
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.functions, menu);
-		return true;
-	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

@@ -12,9 +12,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,7 +23,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Controls extends Activity {
 
@@ -34,8 +33,8 @@ public class Controls extends Activity {
 	JoyStickClass js;
 	
 	private Socket socket;
-	private static final int SERVERPORT = 43000;
-	private static final String SERVER_IP = "192.168.0.27";
+	private final int SERVERPORT = Settings.portValue;
+	private final String SERVER_IP = Settings.ipValue;
     PrintWriter out = null;
     BufferedReader in = null;
     
@@ -65,6 +64,7 @@ public class Controls extends Activity {
 	    js.setMinimumDistance(50);
 	    
 	    layout_joystick.setOnTouchListener(new OnTouchListener() {
+			@SuppressLint("ClickableViewAccessibility")
 			public boolean onTouch(View arg0, MotionEvent arg1) {
 				js.drawStick(arg1);
 				if(arg1.getAction() == MotionEvent.ACTION_DOWN
@@ -116,7 +116,7 @@ public class Controls extends Activity {
         });
 	    
         back = (ImageButton) findViewById(R.id.backButtonControls);
-        back.setOnClickListener(new View.OnClickListener(){ //Second button goes to the second activity
+        back.setOnClickListener(new View.OnClickListener(){ //Back to main
         	@Override
         	public void onClick(View v){
         		try {
@@ -139,27 +139,10 @@ public class Controls extends Activity {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             } catch (UnknownHostException e1) {
                 e1.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Don't know host: " + SERVER_IP, Toast.LENGTH_SHORT).show();
             } catch (IOException e1) {
                 e1.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Couldn't get IO for the connection to: " + SERVER_IP, Toast.LENGTH_SHORT).show();
             }
         }
-	}
-    
-	/*protected void onDestroy(){
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
-	
-    @Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.controls, menu);
-		return true;
 	}
 
     @Override

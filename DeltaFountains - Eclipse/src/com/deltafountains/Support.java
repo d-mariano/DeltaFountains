@@ -6,7 +6,6 @@ package com.deltafountains;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,19 +20,12 @@ public class Support extends Activity {
 		setContentView(R.layout.activity_support);
 		
 		back = (ImageButton) findViewById(R.id.backButtonSupport);
-        back.setOnClickListener(new View.OnClickListener(){ //Second button goes to the second activity
+        back.setOnClickListener(new View.OnClickListener(){ //Back to main
         	@Override
         	public void onClick(View v){
         		finish();
         	}
         });
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.support, menu);
-		return true;
 	}
 
 	@Override
