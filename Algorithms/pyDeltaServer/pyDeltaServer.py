@@ -156,20 +156,22 @@ while True :
     c, addr = s.accept()    # Establish connection with client
     print "Got connection from ", c
     
+    p = printcore()
+
     #######   Connect to the printer  #########
     try:
-        p = printcore('/dev/ttyACM0', 115200)
+        p.connect('/dev/ttyACM0', 115200)
     except Exception,e:
         print str(e)
         try:
             p = printcore('/dev/ttyACM1', 115200)
         except Exception,e2:    
-            print "No printer, quitting."
-            c.close()
-            s.close()
-            sys.exit(1)
+            print "No printer connected, now in debugging mode."
+            #c.close()
+            #s.close()
+            #sys.exit(1)
 
-    timesleep(2)   # Wait for printer to connect
+    time.sleep(2)   # Wait for printer to connect
 
     thread.start_new_thread( receiver, ( c, ) ) # Begin receiver thread
     c.send("Server awaiting commands...\n")
