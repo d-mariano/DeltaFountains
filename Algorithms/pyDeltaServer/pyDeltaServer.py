@@ -139,6 +139,7 @@ s = socket.socket()         # Create a socket object
 host = socket.gethostname() 
 port = 43000                # Reserve a port for your service
 try:
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind((host,port))         # Bind to the port
 except Exception,e:
     print "Failed to bind socket to ", port
@@ -152,7 +153,7 @@ s.listen(5)                 # Now wait for client connection
 print "%s listening on port %s" % (host, port)
 
 while True :
-    c = s.accept()    # Establish connection with client
+    c, addr = s.accept()    # Establish connection with client
     print "Got connection from ", c
     
     #######   Connect to the printer  #########
@@ -160,11 +161,13 @@ while True :
         p = printcore('/dev/ttyACM0', 115200)
     except Exception,e:
         print str(e)
-        p = printcore('/dev/ttyACM1', 115200)
-        print "No printer, quitting."
-        s.close()
-        c.close()
-        sys.exit(1)
+        try:
+            p = printcore('/dev/ttyACM1', 115200)
+        except Exception,e2:    
+            print "No printer, quitting."
+            c.close()
+            s.close()
+            sys.exit(1)
 
     timesleep(2)   # Wait for printer to connect
 
