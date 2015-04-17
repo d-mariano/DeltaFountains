@@ -164,6 +164,7 @@ while True :
         print "No printer, quitting."
         s.close()
         c.close()
+        sys.exit(1)
 
     timesleep(2)   # Wait for printer to connect
 
