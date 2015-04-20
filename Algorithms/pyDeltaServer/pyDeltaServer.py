@@ -132,11 +132,18 @@ def sigintHandler(signum, frame):
 # socket on port 43000.  If a client connects, try and
 # connect to a printer.
 #######################################################
+
+# Initialize sigint handler
+signal.signal(signal.SIGINT, sigintHandler)
+
 # Setup logging to stderr
 setup_logging(sys.stderr)
 
+# Initialize printcore
+p = printcore()
+
 s = socket.socket()         # Create a socket object
-host = socket.gethostname() 
+host = '0.0.0.0' 
 port = 43000                # Reserve a port for your service
 try:
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -147,16 +154,12 @@ except Exception,e:
     s.close()
     sys.exit(1)
 
-signal.signal(signal.SIGINT, sigintHandler)
-
 s.listen(5)                 # Now wait for client connection
 print "%s listening on port %s" % (host, port)
 
 while True :
     c, addr = s.accept()    # Establish connection with client
     print "Got connection from ", c
-    
-    p = printcore()
 
     #######   Connect to the printer  #########
     try:
@@ -167,9 +170,6 @@ while True :
             p = printcore('/dev/ttyACM1', 115200)
         except Exception,e2:    
             print "No printer connected, now in debugging mode."
-            #c.close()
-            #s.close()
-            #sys.exit(1)
 
     time.sleep(2)   # Wait for printer to connect
 
@@ -177,5 +177,4 @@ while True :
     c.send("Server awaiting commands...\n")
     p.send_now("G28 X Y Z")
     p.send_now("G1 Z80 Y80 X80")
-
 
