@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 
 ##  @package pyDeltaServer
-#   A server script written in python that sends GCode commands
-#   to a delta robot.  
+#   A server script written in Python that sends GCode commands
+#   to a delta-bot.  
 #
 #   The commands sent to the robot are determined by selections made 
 #   on an Android or Web-Based client.  The delta bot will have G-code 
