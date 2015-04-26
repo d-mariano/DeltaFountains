@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" href="https://github.com/d-mariano/DeltaControl/tree/gh-pages/stylesheets/stylesheet.css" media="screen">
 <link rel="stylesheet" type="text/css" href="https://github.com/d-mariano/DeltaControl/tree/gh-pages/stylesheets/pygment_trac.css" media="screen">
 <link rel="stylesheet" type="text/css" href="https://github.com/d-mariano/DeltaControl/tree/gh-pages/stylesheets/print.css" media="print">
-<title>Deltacontrol by d-mariano</title>
+<title>Delta Laser - Dave Mariano & Jordan Humphries</title>
 </head>
 <body>
 <header>
