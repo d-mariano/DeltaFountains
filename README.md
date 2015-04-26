@@ -15,8 +15,8 @@
 <section id="downloads">
 <p align="center">
 <a href="https://github.com/d-mariano/DeltaControl/zipball/master" class="btn">Download as .zip</a>
+<br />
 <a href="https://github.com/d-mariano/DeltaControl/tarball/master" class="btn">Download as .tar.gz</a>
-<a href="https://github.com/d-mariano/DeltaControl" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
 </p>
 </section>
 </div>
