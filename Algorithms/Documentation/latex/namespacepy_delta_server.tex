@@ -1,0 +1,88 @@
+\hypertarget{namespacepy_delta_server}{}\section{py\+Delta\+Server Namespace Reference}
+\label{namespacepy_delta_server}\index{py\+Delta\+Server@{py\+Delta\+Server}}
+
+
+A server script written in Python that sends G\+Code commands to a delta robot.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacepy_delta_server_a7280de8d141fe345702baa55dae33147}{sendcommand} (command, socket)
+\begin{DoxyCompactList}\small\item\em Based on client messages, send commands to the printer. \end{DoxyCompactList}\item 
+def \hyperlink{namespacepy_delta_server_a71d558b4f7c47960fdafb193e3ddfaeb}{receiver} (socket)
+\begin{DoxyCompactList}\small\item\em Receiver function to handle a client\textquotesingle{}s input. \end{DoxyCompactList}\item 
+\hypertarget{namespacepy_delta_server_a9397c1b67caa01a9f72a22e3c2624d4c}{}def \hyperlink{namespacepy_delta_server_a9397c1b67caa01a9f72a22e3c2624d4c}{sigint\+Handler} (signum, frame)\label{namespacepy_delta_server_a9397c1b67caa01a9f72a22e3c2624d4c}
+
+\begin{DoxyCompactList}\small\item\em Handler for keyboard interrupt. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+tuple \hyperlink{namespacepy_delta_server_a9f57f27f471bef1c4947e6e03b515430}{p} = printcore()
+\begin{DoxyCompactList}\small\item\em Begin script with logging to stderr and binding to a socket on port 43000. \end{DoxyCompactList}\item 
+\hypertarget{namespacepy_delta_server_a882b3575b268133fed6416e13b268c88}{}tuple {\bfseries s} = socket.\+socket()\label{namespacepy_delta_server_a882b3575b268133fed6416e13b268c88}
+
+\item 
+\hypertarget{namespacepy_delta_server_a39fc5b159aee4d88b7c94a9928c6bc82}{}string {\bfseries host} = \textquotesingle{}0.\+0.\+0.\+0\textquotesingle{}\label{namespacepy_delta_server_a39fc5b159aee4d88b7c94a9928c6bc82}
+
+\item 
+\hypertarget{namespacepy_delta_server_ae9b0174d8630e9df876a3507ec25c656}{}int {\bfseries port} = 43000\label{namespacepy_delta_server_ae9b0174d8630e9df876a3507ec25c656}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A server script written in Python that sends G\+Code commands to a delta robot. 
+
+The commands sent to the robot are determined by selections made on an Android or Web-\/\+Based client. The delta bot will have G-\/code G-\/code compatible firmware installed on its control board. This script uses Printrun libraries provided by kliment on Git\+Hub.
+
+Author\+: Dave Mariano Date\+: Feb 1, 2015 Filename\+: \hyperlink{py_delta_server_8py_source}{py\+Delta\+Server.\+py} Github\+: github.\+com/d-\/mariano/\+Delta\+Laser 
+
+\subsection{Function Documentation}
+\hypertarget{namespacepy_delta_server_a71d558b4f7c47960fdafb193e3ddfaeb}{}\index{py\+Delta\+Server@{py\+Delta\+Server}!receiver@{receiver}}
+\index{receiver@{receiver}!py\+Delta\+Server@{py\+Delta\+Server}}
+\subsubsection[{receiver}]{\setlength{\rightskip}{0pt plus 5cm}def py\+Delta\+Server.\+receiver (
+\begin{DoxyParamCaption}
+\item[{}]{socket}
+\end{DoxyParamCaption}
+)}\label{namespacepy_delta_server_a71d558b4f7c47960fdafb193e3ddfaeb}
+
+
+Receiver function to handle a client\textquotesingle{}s input. 
+
+Run this function in a separate thread to implement asynchronous client/server communication. 
+
+Definition at line 91 of file py\+Delta\+Server.\+py.
+
+\hypertarget{namespacepy_delta_server_a7280de8d141fe345702baa55dae33147}{}\index{py\+Delta\+Server@{py\+Delta\+Server}!sendcommand@{sendcommand}}
+\index{sendcommand@{sendcommand}!py\+Delta\+Server@{py\+Delta\+Server}}
+\subsubsection[{sendcommand}]{\setlength{\rightskip}{0pt plus 5cm}def py\+Delta\+Server.\+sendcommand (
+\begin{DoxyParamCaption}
+\item[{}]{command, }
+\item[{}]{socket}
+\end{DoxyParamCaption}
+)}\label{namespacepy_delta_server_a7280de8d141fe345702baa55dae33147}
+
+
+Based on client messages, send commands to the printer. 
+
+Relate messages received from the client with particular G-\/code commands for the printer. The control board can support S\+D cards, but commands can also be issued in-\/line. 
+
+Definition at line 33 of file py\+Delta\+Server.\+py.
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{namespacepy_delta_server_a9f57f27f471bef1c4947e6e03b515430}{}\index{py\+Delta\+Server@{py\+Delta\+Server}!p@{p}}
+\index{p@{p}!py\+Delta\+Server@{py\+Delta\+Server}}
+\subsubsection[{p}]{\setlength{\rightskip}{0pt plus 5cm}tuple py\+Delta\+Server.\+p = printcore()}\label{namespacepy_delta_server_a9f57f27f471bef1c4947e6e03b515430}
+
+
+Begin script with logging to stderr and binding to a socket on port 43000. 
+
+Connect to the printer \#\#\#\#\#\#\#\#\#.
+
+If a client connects, try and connect to a printer. 
+
+Definition at line 141 of file py\+Delta\+Server.\+py.
+
