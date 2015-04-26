@@ -12,5 +12,8 @@
         <li><a href="http://www.python.org/downloads">Python 2.x</a></li>
         <li><a href="https://www.github.com/kliment/Printrun">Printrun/Printcore API</a></li>
     </ul>
-
+    <h2>Run Instructions</h2>
+    <p>Simply run the following in the <i>pyDeltaServer</i> directory:
+    <code>`python pyDeltaServer.py`</code>
+    </p>
 </body>
