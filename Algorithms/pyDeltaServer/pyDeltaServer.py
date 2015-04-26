@@ -4,11 +4,20 @@
 #   A server script written in Python that sends GCode commands
 #   to a delta robot.
 #
-#   The commands sent to the robot are determined by selections made 
-#   on an Android or Web-Based client.  The delta bot will have G-code 
-#   G-code compatible firmware installed on its control board.  This 
-#   script uses Printrun libraries provided by kliment on GitHub.
-#   
+#   The commands sent to the robot are determined by selections made on an 
+#   Android or Web-Based client.  The delta bot will have G-code G-code 
+#   compatible firmware installed on its control board.  This script uses 
+#   Printrun libraries provided by kliment on GitHub.
+#      
+#   The server begins by waiting for a client.  When a client connects, the 
+#   server will attempt to connect to a printer on /dev/ttyACM0.  If this 
+#   fails, it will attempt to connect to a printer on /dev/ttyACM1; it is 
+#   possible that the device name will change from either one of these.  If 
+#   neither one of these attempts succeed, then the server will begin with 
+#
+#   no printer connection.  This is especially useful for debugging client
+#   to server communication without having to connect to a control board.
+#
 #   Author:     Dave Mariano
 #   Date:       Feb 1, 2015
 #   Filename:   pyDeltaServer.py
