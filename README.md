@@ -37,20 +37,34 @@ Before building this delta robot, I built a delta 3D printer based off of the [K
 <br />
 
 ####Requirements
-* 3x Stepper Motors, Nema 17 1.8° 2A
-* 3x 20mm x 20mm x 11.4375(11 and 7/16)inch Aluminum Extrusions 
+* 3x Stepper Motors, Nema 17 1.8° 2A 
+* 3x 20mm x 20mm x 11.4375(11 and 7/16)inch Aluminum Extrusions (Make sure you read the above section: Optional)
 * 12x 20mm x 20mm x 5.25inch Aluminum Extrusions (5.5" length is probably what I should have cut, try that first)
 * 90x M3 or M5 T-Nuts (You might have trouble finding same size T-nuts, they must at least be M3)
-* 90x M3 or M5 12mm Socketed Cap Screws (Size here depends on the T-Nuts you found) 
-* 9x M8 12mm Socketed Cap Screws
-* 27x M8 Hex Nuts
-* More stuff
-* 9x 608Z Ball Bearings
-* 3x 623 Ball Bearings
+* 90x M3 or M5 12mm Socketed Cap Screws (Size here depends on the T-Nuts you found)
+* 6x M3 16mm Phillips Head (Head of a cap screw won't fit, observe Top Frame instructions)
+* 6x M3 12mm (Cap screws may interfere with these and the next two requiremetns, proceed with caution)
+* 3x M3 15 or 16 mm (These must go through 12mm of material and then a hex nut)
+* 6x M2 16mm (These must go through 12mm of material and then a hex nut)
+* 9x M8 12mm Socketed Cap Screws (For the carriages)
+* 27x M8 Hex Nuts (For the carriages)
+* 9x 608Z Ball Bearings (For the carriages)
+* 3x 623 Ball Bearings (For the pulley system see Top Frame instructions)
 * T2.5 Timing Belt (Get 2 meters to be safe)
+* 3x 2.6 Pulley (For the stepper motor shafts)
 * 6 Mechanical End-stops (At least 3, 6 is for Min and Max on the top and bottom of all 3 pillars)
-* Tegan <3
 <br />
+
+####3D Printed Parts
+1. 3x Kossel Base
+2. 3x Kossel Top
+3. 3x Kossel Carriages
+
+####Laser-Cut Parts
+1. 6x Carriage Plate
+2. 1x Laser Shield
+3. 1x Motor Shield
+4. 1x Baseplate
 
 ####Build Instructions 
 1. [Lower Frame](https://www.mixshop.com/docs/manual/kossel/lower_frame) (You may have to do this twice if you are extending the chassis)
