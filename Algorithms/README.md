@@ -4,9 +4,9 @@
     </title>
 </head>
 <body>
-    <p align="center">
-    <a href="http://rawgit.com/d-mariano/DeltaLaser/tree/master/Algorithms/Documentation/html/index.html">Click here for Doxygen generated documentation</a>
-    </p>
+    <h1 align="center">
+    <a href="https://rawgit.com/d-mariano/DeltaLaser/master/Algorithms/Documentation/html/index.html">Click here for Doxygen generated documentation</a>
+    </h1>
 
 
 </body>
