@@ -55,16 +55,16 @@ Before building this delta robot, I built a delta 3D printer based off of the [K
 * 6 Mechanical End-stops (At least 3, 6 is for Min and Max on the top and bottom of all 3 pillars)
 <br />
 
-######3D Printed Parts
+######3D Printed Parts (In Resources)
 1. 3x Kossel Base
 2. 3x Kossel Top
 3. 3x Kossel Carriages
 
-######Laser-Cut Parts
-1. 6x Carriage Plate
+######Laser-Cut Parts (In Resources)
+1. 6x Carriage Plate (Just a scanned image, need to aquire CorelDRAW file)
 2. 1x Laser Shield
 3. 1x Motor Shield
-4. 1x Baseplate
+4. 1x Baseplate (Needs to be replaced with updated version)
 <br />
 
 ####Build Instructions 
