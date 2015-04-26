@@ -114,183 +114,192 @@ $(document).ready(function(){initNavTree('py_delta_server_8py_source.html','');}
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">#   A server script written in Python that sends GCode commands</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">#   to a delta robot.</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">#</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">#   The commands sent to the robot are determined by selections made </span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">#   on an Android or Web-Based client.  The delta bot will have G-code </span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">#   G-code compatible firmware installed on its control board.  This </span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">#   script uses Printrun libraries provided by kliment on GitHub.</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">#   </span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">#   Author:     Dave Mariano</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">#   Date:       Feb 1, 2015</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">#   Filename:   pyDeltaServer.py</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">#   Github:     github.com/d-mariano/DeltaLaser   </span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">#</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">import</span> socket</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">import</span> sys</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">import</span> time</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">import</span> thread</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">import</span> signal</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">import</span> os</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">from</span> printrun.printcore <span class="keyword">import</span> printcore</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">from</span> printrun.utils <span class="keyword">import</span> setup_logging</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">from</span> printrun <span class="keyword">import</span> gcoder</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">## Based on client messages, send commands to the printer.</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">#</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"># Relate messages received from the client with particular</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"># G-code commands for the printer.  The control board can</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"># support SD cards, but commands can also be issued in-line.</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">   33</a></span>&#160;<span class="keyword">def </span><a class="code" href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">sendcommand</a>( command, socket ):</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keywordflow">if</span> ( command == <span class="stringliteral">&quot;neutral&quot;</span> ):</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z80 Y80 X80&quot;</span>)</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">if</span> ( command == <span class="stringliteral">&quot;north&quot;</span> ):</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z60 Y100 X100&quot;</span>)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment"># SD Card Commands</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="comment">#print &quot;Loading \&quot;north.gcoode\&quot;&quot;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="comment">#p.send_now(&quot;M23 north.gcoode&quot;)</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;south&quot;</span> ):</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z100 Y60 X60&quot;</span>)</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="comment">#print &quot;Loading \&quot;south.gcode\&quot;&quot;</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="comment">#p.send_now(&quot;M23 south.gcode&quot;)</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;east&quot;</span> ):</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z80 Y60 X100&quot;</span>)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="comment">#print &quot;Loading \&quot;east.gcode\&quot;&quot;</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="comment">#p.send_now(&quot;M23 east.gcode&quot;)</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;west&quot;</span> ):</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z80 Y100 X60&quot;</span>)</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="comment">#print &quot;Loading \&quot;west.gcode\&quot;&quot;</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="comment">#p.send_now(&quot;M23 west.gcode&quot;)</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;northeast&quot;</span> ):</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">print</span> command </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z60 Y90 X110&quot;</span>)</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;northwest&quot;</span> ):</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z60 Y110 X90&quot;</span>)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;southeast&quot;</span> ):</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z100 Y50 X70&quot;</span>)</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;southwest&quot;</span> ):</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z100 Y70 X50&quot;</span>)</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;home&quot;</span> ):</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        p.send_now(<span class="stringliteral">&quot;G28&quot;</span>)</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;disconnect&quot;</span> ):</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">print</span> command</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="comment">#print &quot;Disconnecting from robot...&quot;</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        p.disconnect()</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordflow">else</span>:</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        socket.send(<span class="stringliteral">&quot;Command not found\n&quot;</span>);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">## Receiver function to handle a client&#39;s input</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">#</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment"># Run this function in a separate  thread to implement </span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment"># asynchronous client/server communication.</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a71d558b4f7c47960fdafb193e3ddfaeb">   91</a></span>&#160;<span class="keyword">def </span><a class="code" href="namespacepy_delta_server.html#a71d558b4f7c47960fdafb193e3ddfaeb">receiver</a>( socket ):</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">while</span> <span class="keyword">True</span>:</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            input = socket.recv(1024)</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="comment"># Srip string of a newline</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            input = input.strip( <span class="stringliteral">&#39;\n&#39;</span> )</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;Recieved: %s\n&quot;</span> % (input)</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">if</span> ( input == <span class="stringliteral">&quot;exit&quot;</span> ):</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                p.disconnect()</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                socket.close()</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                <span class="keywordflow">print</span> <span class="stringliteral">&quot;Client gone...\n&quot;</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                <span class="keywordflow">return</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">else</span>:</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                <span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    <a class="code" href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">sendcommand</a>( input, socket )</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                <span class="keywordflow">except</span>:</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                    <span class="keywordflow">print</span> <span class="stringliteral">&quot;Client gone...\n&quot;</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                    p.disconnect()</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                    socket.close()</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                    <span class="keywordflow">return</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">except</span>:</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;Socket closed&quot;</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            p.disconnect()</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            socket.close()</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;Client gone...\n&quot;</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordflow">return</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">##</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment"># Handler for keyboard interrupt</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">#</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a9397c1b67caa01a9f72a22e3c2624d4c">  123</a></span>&#160;<span class="keyword">def </span><a class="code" href="namespacepy_delta_server.html#a9397c1b67caa01a9f72a22e3c2624d4c">sigintHandler</a>(signum, frame):</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    p.disconnect()</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    s.close()</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    c.close()</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    sys.exit(1)</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">#   The commands sent to the robot are determined by selections made on an </span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">#   Android or Web-Based client.  The delta bot will have G-code G-code </span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">#   compatible firmware installed on its control board.  This script uses </span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">#   Printrun libraries provided by kliment on GitHub.</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">#      </span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">#   The server begins by waiting for a client.  When a client connects, the </span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">#   server will attempt to connect to a printer on /dev/ttyACM0.  If this </span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">#   fails, it will attempt to connect to a printer on /dev/ttyACM1; it is </span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">#   possible that the device name will change from either one of these.  If </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">#   neither one of these attempts succeed, then the server will begin with </span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">#   no printer connection.  This is especially useful for debugging client</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">#   to server communication without having to connect to a control board.</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">#   Author:     Dave Mariano</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">#   Date:       Feb 1, 2015</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">#   Filename:   pyDeltaServer.py</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">#   Github:     github.com/d-mariano/DeltaLaser   </span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">import</span> socket</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">import</span> sys</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">import</span> time</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">import</span> thread</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">import</span> signal</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">import</span> os</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">from</span> printrun.printcore <span class="keyword">import</span> printcore</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">from</span> printrun.utils <span class="keyword">import</span> setup_logging</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">from</span> printrun <span class="keyword">import</span> gcoder</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">## Based on client messages, send commands to the printer.</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"># Relate messages received from the client with particular</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"># G-code commands for the printer.  The control board can</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment"># support SD cards, but commands can also be issued in-line.</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">   42</a></span>&#160;<span class="keyword">def </span><a class="code" href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">sendcommand</a>( command, socket ):</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">if</span> ( command == <span class="stringliteral">&quot;neutral&quot;</span> ):</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z80 Y80 X80&quot;</span>)</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordflow">if</span> ( command == <span class="stringliteral">&quot;north&quot;</span> ):</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z60 Y100 X100&quot;</span>)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="comment"># SD Card Commands</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="comment">#print &quot;Loading \&quot;north.gcoode\&quot;&quot;</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="comment">#p.send_now(&quot;M23 north.gcoode&quot;)</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;south&quot;</span> ):</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z100 Y60 X60&quot;</span>)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="comment">#print &quot;Loading \&quot;south.gcode\&quot;&quot;</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="comment">#p.send_now(&quot;M23 south.gcode&quot;)</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;east&quot;</span> ):</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z80 Y60 X100&quot;</span>)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="comment">#print &quot;Loading \&quot;east.gcode\&quot;&quot;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="comment">#p.send_now(&quot;M23 east.gcode&quot;)</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;west&quot;</span> ):</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z80 Y100 X60&quot;</span>)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="comment">#print &quot;Loading \&quot;west.gcode\&quot;&quot;</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">#p.send_now(&quot;M23 west.gcode&quot;)</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="comment">#p.send_now(&quot;M24&quot;)</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;northeast&quot;</span> ):</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">print</span> command </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z60 Y90 X110&quot;</span>)</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;northwest&quot;</span> ):</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z60 Y110 X90&quot;</span>)</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;southeast&quot;</span> ):</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z100 Y50 X70&quot;</span>)</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;southwest&quot;</span> ):</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        p.send_now(<span class="stringliteral">&quot;G1 Z100 Y70 X50&quot;</span>)</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;home&quot;</span> ):</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        p.send_now(<span class="stringliteral">&quot;G28&quot;</span>)</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordflow">elif</span> ( command == <span class="stringliteral">&quot;disconnect&quot;</span> ):</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">print</span> command</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="comment">#print &quot;Disconnecting from robot...&quot;</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        p.disconnect()</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        socket.send(<span class="stringliteral">&quot;Command not found\n&quot;</span>);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">## Receiver function to handle a client&#39;s input</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment"># Run this function in a separate  thread to implement </span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment"># asynchronous client/server communication.</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a71d558b4f7c47960fdafb193e3ddfaeb">  100</a></span>&#160;<span class="keyword">def </span><a class="code" href="namespacepy_delta_server.html#a71d558b4f7c47960fdafb193e3ddfaeb">receiver</a>( socket ):</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordflow">while</span> <span class="keyword">True</span>:</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            input = socket.recv(1024)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <span class="comment"># Srip string of a newline</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            input = input.strip( <span class="stringliteral">&#39;\n&#39;</span> )</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;Recieved: %s\n&quot;</span> % (input)</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">if</span> ( input == <span class="stringliteral">&quot;exit&quot;</span> ):</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                p.disconnect()</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                socket.close()</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                <span class="keywordflow">print</span> <span class="stringliteral">&quot;Client gone...\n&quot;</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                    <a class="code" href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">sendcommand</a>( input, socket )</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                <span class="keywordflow">except</span>:</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                    <span class="keywordflow">print</span> <span class="stringliteral">&quot;Client gone...\n&quot;</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                    p.disconnect()</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                    socket.close()</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                    <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <span class="keywordflow">except</span>:</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;Socket closed&quot;</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            p.disconnect()</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            socket.close()</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;Client gone...\n&quot;</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <span class="keywordflow">return</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        </div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">######################################################</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment"># Begin script with logging to stderr and binding to a </span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment"># socket on port 43000.  If a client connects, try and</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="comment"># connect to a printer.</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment"># Initialize sigint handler</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;signal.signal(signal.SIGINT, sigintHandler)</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="comment"># Setup logging to stderr</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;setup_logging(sys.stderr)</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment"># Initialize printcore</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a9f57f27f471bef1c4947e6e03b515430">  141</a></span>&#160;p = printcore()</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">##</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment"># Handler for keyboard interrupt</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment">#</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a9397c1b67caa01a9f72a22e3c2624d4c">  132</a></span>&#160;<span class="keyword">def </span><a class="code" href="namespacepy_delta_server.html#a9397c1b67caa01a9f72a22e3c2624d4c">sigintHandler</a>(signum, frame):</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    p.disconnect()</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    s.close()</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    c.close()</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    sys.exit(1)</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment">######################################################</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment"># Begin script with logging to stderr and binding to a </span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment"># socket on port 43000.  If a client connects, try and</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment"># connect to a printer.</span></div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;s = socket.socket()         <span class="comment"># Create a socket object</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;host = <span class="stringliteral">&#39;0.0.0.0&#39;</span> </div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;port = 43000              </div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment"># Setup a stream socket with the host and port specified above.</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    s.bind((host,port))         <span class="comment"># Bind to the port</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="keywordflow">except</span> Exception,e:</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keywordflow">print</span> <span class="stringliteral">&quot;Failed to bind socket to &quot;</span>, port</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">print</span> str(e)</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    s.close()</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    sys.exit(1)</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;s.listen(5)                 <span class="comment"># Now wait for client connection</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="keywordflow">print</span> <span class="stringliteral">&quot;%s listening on port %s&quot;</span> % (host, port)</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keywordflow">while</span> <span class="keyword">True</span> :</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    c, addr = s.accept()    <span class="comment"># Establish connection with client</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keywordflow">print</span> <span class="stringliteral">&quot;Got connection from &quot;</span>, c</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="comment">#######   Connect to the printer  #########</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        p.connect(<span class="stringliteral">&#39;/dev/ttyACM0&#39;</span>, 115200)</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="keywordflow">except</span> Exception,e:</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keywordflow">print</span> str(e)</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            p = printcore(<span class="stringliteral">&#39;/dev/ttyACM1&#39;</span>, 115200)</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">except</span> Exception,e2:    </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;No printer connected, now in debugging mode.&quot;</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    time.sleep(2)   <span class="comment"># Wait for printer to connect</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    thread.start_new_thread( receiver, ( c, ) ) <span class="comment"># Begin receiver thread</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    c.send(<span class="stringliteral">&quot;Server awaiting commands...\n&quot;</span>)</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    p.send_now(<span class="stringliteral">&quot;G28 X Y Z&quot;</span>)</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    p.send_now(<span class="stringliteral">&quot;G1 Z80 Y80 X80&quot;</span>)</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="ttc" id="namespacepy_delta_server_html_a9397c1b67caa01a9f72a22e3c2624d4c"><div class="ttname"><a href="namespacepy_delta_server.html#a9397c1b67caa01a9f72a22e3c2624d4c">pyDeltaServer.sigintHandler</a></div><div class="ttdeci">def sigintHandler(signum, frame)</div><div class="ttdoc">Handler for keyboard interrupt. </div><div class="ttdef"><b>Definition:</b> <a href="py_delta_server_8py_source.html#l00123">pyDeltaServer.py:123</a></div></div>
-<div class="ttc" id="namespacepy_delta_server_html_a7280de8d141fe345702baa55dae33147"><div class="ttname"><a href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">pyDeltaServer.sendcommand</a></div><div class="ttdeci">def sendcommand(command, socket)</div><div class="ttdoc">Based on client messages, send commands to the printer. </div><div class="ttdef"><b>Definition:</b> <a href="py_delta_server_8py_source.html#l00033">pyDeltaServer.py:33</a></div></div>
-<div class="ttc" id="namespacepy_delta_server_html_a71d558b4f7c47960fdafb193e3ddfaeb"><div class="ttname"><a href="namespacepy_delta_server.html#a71d558b4f7c47960fdafb193e3ddfaeb">pyDeltaServer.receiver</a></div><div class="ttdeci">def receiver(socket)</div><div class="ttdoc">Receiver function to handle a client&#39;s input. </div><div class="ttdef"><b>Definition:</b> <a href="py_delta_server_8py_source.html#l00091">pyDeltaServer.py:91</a></div></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment"># Initialize sigint handler</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;signal.signal(signal.SIGINT, sigintHandler)</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment"># Setup logging to stderr</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;setup_logging(sys.stderr)</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment"># Initialize printcore</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="namespacepy_delta_server.html#a9f57f27f471bef1c4947e6e03b515430">  150</a></span>&#160;p = printcore()</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;s = socket.socket()         <span class="comment"># Create a socket object</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;host = <span class="stringliteral">&#39;0.0.0.0&#39;</span> </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;port = 43000              </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="comment"># Setup a stream socket with the host and port specified above.</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    s.bind((host,port))         <span class="comment"># Bind to the port</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="keywordflow">except</span> Exception,e:</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordflow">print</span> <span class="stringliteral">&quot;Failed to bind socket to &quot;</span>, port</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keywordflow">print</span> str(e)</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    s.close()</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    sys.exit(1)</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;s.listen(5)                 <span class="comment"># Now wait for client connection</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="keywordflow">print</span> <span class="stringliteral">&quot;%s listening on port %s&quot;</span> % (host, port)</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="keywordflow">while</span> <span class="keyword">True</span> :</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    c, addr = s.accept()    <span class="comment"># Establish connection with client</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keywordflow">print</span> <span class="stringliteral">&quot;Got connection from &quot;</span>, c</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="comment">#######   Connect to the printer  #########</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        p.connect(<span class="stringliteral">&#39;/dev/ttyACM0&#39;</span>, 115200)</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keywordflow">except</span> Exception,e:</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordflow">print</span> str(e)</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            p = printcore(<span class="stringliteral">&#39;/dev/ttyACM1&#39;</span>, 115200)</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordflow">except</span> Exception,e2:    </div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&quot;No printer connected, now in debugging mode.&quot;</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    time.sleep(2)   <span class="comment"># Wait for printer to connect</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    thread.start_new_thread( receiver, ( c, ) ) <span class="comment"># Begin receiver thread</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    c.send(<span class="stringliteral">&quot;Server awaiting commands...\n&quot;</span>)</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    p.send_now(<span class="stringliteral">&quot;G28 X Y Z&quot;</span>)</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    p.send_now(<span class="stringliteral">&quot;G1 Z80 Y80 X80&quot;</span>)</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
+<div class="ttc" id="namespacepy_delta_server_html_a9397c1b67caa01a9f72a22e3c2624d4c"><div class="ttname"><a href="namespacepy_delta_server.html#a9397c1b67caa01a9f72a22e3c2624d4c">pyDeltaServer.sigintHandler</a></div><div class="ttdeci">def sigintHandler(signum, frame)</div><div class="ttdoc">Handler for keyboard interrupt. </div><div class="ttdef"><b>Definition:</b> <a href="py_delta_server_8py_source.html#l00132">pyDeltaServer.py:132</a></div></div>
+<div class="ttc" id="namespacepy_delta_server_html_a7280de8d141fe345702baa55dae33147"><div class="ttname"><a href="namespacepy_delta_server.html#a7280de8d141fe345702baa55dae33147">pyDeltaServer.sendcommand</a></div><div class="ttdeci">def sendcommand(command, socket)</div><div class="ttdoc">Based on client messages, send commands to the printer. </div><div class="ttdef"><b>Definition:</b> <a href="py_delta_server_8py_source.html#l00042">pyDeltaServer.py:42</a></div></div>
+<div class="ttc" id="namespacepy_delta_server_html_a71d558b4f7c47960fdafb193e3ddfaeb"><div class="ttname"><a href="namespacepy_delta_server.html#a71d558b4f7c47960fdafb193e3ddfaeb">pyDeltaServer.receiver</a></div><div class="ttdeci">def receiver(socket)</div><div class="ttdoc">Receiver function to handle a client&#39;s input. </div><div class="ttdef"><b>Definition:</b> <a href="py_delta_server_8py_source.html#l00100">pyDeltaServer.py:100</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
