@@ -2,7 +2,7 @@
 
 ##  @package pyDeltaServer
 #   A server script written in Python that sends GCode commands
-#   to a delta-bot.  
+#   to a delta robot.
 #
 #   The commands sent to the robot are determined by selections made 
 #   on an Android or Web-Based client.  The delta bot will have G-code 
