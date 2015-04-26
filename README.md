@@ -30,7 +30,7 @@
 <section id="build_content">
 <h2>Build Instructions</h2>
 <h3>By: Dave Mariano</h3>
-<p>Before building this delta robot, I build a delta 3D printer based off of the <a href="http://reprap.org/wiki/Kossel">Kossel</a> design.  In fact, it was to be a miniature version of the Kossel, a Kossel-Mini.  I ordered a kit from <a href="http://mixshop.com/index.php?main_page=product_info&cPath=59&products_id=220">Mixshop</a> and assembled it.  They actually call it the <a href="https://www.mixshop.com/docs/product/kossel>Mini Kossel X</a>.  Based off this experience, I was able to create a similar delta robot, but even smaller and not a printer.  This eliminated several build steps.  
+<p>Before building this delta robot, I build a delta 3D printer based off of the <a href="http://reprap.org/wiki/Kossel">Kossel</a> design.  In fact, it was to be a miniature version of the Kossel, a Kossel-Mini.  I ordered a kit from <a href="http://mixshop.com/index.php?main_page=product_info&cPath=59&products_id=220">Mixshop</a> and assembled it.  They actually call it the <a href="https://www.mixshop.com/docs/product/kossel">Mini Kossel X</a>.  Based off this experience, I was able to create a similar delta robot, but even smaller and not a printer.  This eliminated several build steps.  
 </section>
 </div>
 </body>
