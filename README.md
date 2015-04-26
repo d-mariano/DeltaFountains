@@ -22,14 +22,22 @@ The major goal for Delta Laser is to relay commands from a mobile device to a co
 ####By: Dave Mariano
 ---
 
-Before building this delta robot, I built a delta 3D printer based off of the [Kossel](http://reprap.org/wiki/Kossel) design.  In fact, it was to be a miniature version of the Kossel, a Kossel Mini.  I ordered a kit from [Mixshop](http://mixshop.com/index.php?main_page=product_info&cPath=59&products_id=220) and assembled it.  They actually call it the [Kossel Mini X](https://www.mixshop.com/docs/product/kossel).  Based off this experience, I was able to create a similar delta robot, but even smaller and not a printer.  This eliminated several build steps.  I will provide a list of categories required to build the Delta Laser robot, they will be linked to Mixshop's updated build instructions.  These categories do not describe all steps to build a 3D printer.  If you want to try and build an actual 3D printer, then you should do some reserach [here](http://reprap.org/wiki/RepRap_Options#Models), pick a model that best suits you, and then decide if you want to purchase a kit or purchase materials separately.  Some kits provide more work than others, in building and in calibrating; do your research. The one I assembled was quite challenging, I enjoyed the process.  You should also consider the licenses used, they are listed under each model on the page I linked.  The Kossel is protected under the [GPL](http://reprap.org/wiki/GPL).  
+Before building this delta robot, I built a delta 3D printer based off of the [Kossel](http://reprap.org/wiki/Kossel) design.  In fact, it was to be a miniature version of the Kossel, a Kossel Mini.  I ordered a kit from [Mixshop](http://mixshop.com/index.php?main_page=product_info&cPath=59&products_id=220) and assembled it.  They actually call it the [Kossel Mini X](https://www.mixshop.com/docs/product/kossel).  Based off this experience, I was able to create a similar delta robot, but even smaller and not a printer.  This eliminated several build steps.  I will provide a list of categories required to build the Delta Laser robot. These categoires are linked to Mixshop's updated build instructions, so you will need to click on them. These categories alone do not describe all steps to build a 3D printer. If you want to try and build an actual 3D printer, then you should do some reserach [here](http://reprap.org/wiki/RepRap_Options#Models), pick a model that best suits you, and then decide if you want to purchase a kit or purchase materials separately.  Some kits provide more work than others, in building and in calibrating; do your research. The one I assembled was quite challenging, I enjoyed the process.  You should also consider the licenses used, they are listed under each model on the page I linked.  The Kossel is protected under the [GPL](http://reprap.org/wiki/GPL).  
+
+####Optional
+   The aluminum extrusions for my delta robot are cut to fit two bottom frames.  The reason I have two bottom frames is because one is used to hold the motors, being the top one, and the other will act as a chassis extension to hold the RAMPS and Arduino within.  This is not entirely necessary, but recommended.  If you choose this route, continue normally to the Requirements section.  If you do not choose this route, consider the following:
+   * The 3 long alluminum pieces described below will only have to be 9 and 7/16 inches, not 11 and 7/16 inches.  
+   * The amount of T-nuts and M3/M5 12mm socketed cap screws can be reduced by 30, so now you only need 60.  
+   * I advise to still stick with 90 T-Nuts and socketed cap screws; they are handy for future attachments.
+   * You will only need one set of 3 bottom frame 3D printed pieces, not 6.
+   * The laser cut baseplate described will not be needed to hold a board, but would still act as a nice base anyway.
 
 ####Requirements
 * 3x Stepper Motors, Nema 17 1.8° 2A
 * 3x 20mm x 20mm x 11.4375(11 and 7/16)inch Aluminum Extrusions 
 * 12x 20mm x 20mm x 5.25inch Aluminum Extrusions (5.5" length is probably what I should have cut, try that first)
 * 90x M3 or M5 T-Nuts (You might have trouble finding same size T-nuts, they must at least be M3)
-* 90x M3 or M5 12mm Socketed Cap Screws (Depending on the T-Nuts you found) 
+* 90x M3 or M5 12mm Socketed Cap Screws (Size here depends on the T-Nuts you found) 
 * 9x M8 12mm Socketed Cap Screws
 * 27x M8 Hex Nuts
 * More stuff
@@ -39,8 +47,8 @@ Before building this delta robot, I built a delta 3D printer based off of the [K
 * 6 Mechanical End-stops (At least 3, 6 is for Min and Max on the top and bottom of all 3 pillars)
 * Tegan <3
 
-####Build Instructions
-1. [Lower Frame](https://www.mixshop.com/docs/manual/kossel/lower_frame)
+####Build Instructions 
+1. [Lower Frame](https://www.mixshop.com/docs/manual/kossel/lower_frame) (You may have to do this twice if you are building two)
 2. [Top Frame](https://www.mixshop.com/docs/manual/kossel/top_frame)
 3. [Carriage](https://www.mixshop.com/docs/manual/kossel/carriage)
 4. [Frame Structure](https://www.mixshop.com/docs/manual/kossel/frame_structure)
