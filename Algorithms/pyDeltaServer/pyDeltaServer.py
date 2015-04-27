@@ -14,7 +14,6 @@
 #   fails, it will attempt to connect to a printer on /dev/ttyACM1; it is 
 #   possible that the device name will change from either one of these.  If 
 #   neither one of these attempts succeed, then the server will begin with 
-#
 #   no printer connection.  This is especially useful for debugging client
 #   to server communication without having to connect to a control board.
 #
