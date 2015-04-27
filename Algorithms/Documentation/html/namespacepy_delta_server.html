@@ -147,8 +147,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b> = 43000</td><
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A server script written in Python that sends GCode commands to a delta robot. </p>
 <p>The commands sent to the robot are determined by selections made on an Android or Web-Based client. The delta bot will have G-code G-code compatible firmware installed on its control board. This script uses Printrun libraries provided by kliment on GitHub.</p>
-<p>The server begins by waiting for a client. When a client connects, the server will attempt to connect to a printer on /dev/ttyACM0. If this fails, it will attempt to connect to a printer on /dev/ttyACM1; it is possible that the device name will change from either one of these. If neither one of these attempts succeed, then the server will begin with</p>
-<p>no printer connection. This is especially useful for debugging client to server communication without having to connect to a control board.</p>
+<p>The server begins by waiting for a client. When a client connects, the server will attempt to connect to a printer on /dev/ttyACM0. If this fails, it will attempt to connect to a printer on /dev/ttyACM1; it is possible that the device name will change from either one of these. If neither one of these attempts succeed, then the server will begin with no printer connection. This is especially useful for debugging client to server communication without having to connect to a control board.</p>
 <p>Author: Dave Mariano Date: Feb 1, 2015 Filename: <a class="el" href="py_delta_server_8py_source.html">pyDeltaServer.py</a> Github: github.com/d-mariano/DeltaLaser </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a71d558b4f7c47960fdafb193e3ddfaeb"></a>
@@ -168,7 +167,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b> = 43000</td><
 <p>Receiver function to handle a client's input. </p>
 <p>Run this function in a separate thread to implement asynchronous client/server communication. </p>
 
-<p>Definition at line <a class="el" href="py_delta_server_8py_source.html#l00100">100</a> of file <a class="el" href="py_delta_server_8py_source.html">pyDeltaServer.py</a>.</p>
+<p>Definition at line <a class="el" href="py_delta_server_8py_source.html#l00099">99</a> of file <a class="el" href="py_delta_server_8py_source.html">pyDeltaServer.py</a>.</p>
 
 </div>
 </div>
@@ -199,7 +198,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b> = 43000</td><
 <p>Based on client messages, send commands to the printer. </p>
 <p>Relate messages received from the client with particular G-code commands for the printer. The control board can support SD cards, but commands can also be issued in-line. </p>
 
-<p>Definition at line <a class="el" href="py_delta_server_8py_source.html#l00042">42</a> of file <a class="el" href="py_delta_server_8py_source.html">pyDeltaServer.py</a>.</p>
+<p>Definition at line <a class="el" href="py_delta_server_8py_source.html#l00041">41</a> of file <a class="el" href="py_delta_server_8py_source.html">pyDeltaServer.py</a>.</p>
 
 </div>
 </div>
@@ -218,7 +217,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>port</b> = 43000</td><
 <p>Connect to the printer #########.</p>
 <p>If a client connects, try and connect to a printer. </p>
 
-<p>Definition at line <a class="el" href="py_delta_server_8py_source.html#l00150">150</a> of file <a class="el" href="py_delta_server_8py_source.html">pyDeltaServer.py</a>.</p>
+<p>Definition at line <a class="el" href="py_delta_server_8py_source.html#l00149">149</a> of file <a class="el" href="py_delta_server_8py_source.html">pyDeltaServer.py</a>.</p>
 
 </div>
 </div>
