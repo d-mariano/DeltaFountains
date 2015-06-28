@@ -40,61 +40,61 @@ from printrun import gcoder
 # support SD cards, but commands can also be issued in-line.
 def sendcommand( command, socket ):
     if ( command == "neutral" ):
-        print command
+        print "Executing %s..." % (command)
         p.send_now("G1 Z80 Y80 X80")
     
     if ( command == "north" ):
-        print command
+        print "Executing %s..." % (command)        
         p.send_now("G1 Z60 Y100 X100")
         # SD Card Commands
         #print "Loading \"north.gcoode\""
         #p.send_now("M23 north.gcoode")
         #p.send_now("M24")
     elif ( command == "south" ):
-        print command
+        print "Executing %s..." % (command)
         p.send_now("G1 Z100 Y60 X60")
         #print "Loading \"south.gcode\""
         #p.send_now("M23 south.gcode")
         #p.send_now("M24")
     elif ( command == "east" ):
-        print command
+        print "Executing %s..." % (command)
         p.send_now("G1 Z80 Y60 X100")
         #print "Loading \"east.gcode\""
         #p.send_now("M23 east.gcode")
         #p.send_now("M24")
     elif ( command == "west" ):
-        print command
+        print "Executing %s..." % (command)
         p.send_now("G1 Z80 Y100 X60")
         #print "Loading \"west.gcode\""
         #p.send_now("M23 west.gcode")
         #p.send_now("M24")
 
     elif ( command == "northeast" ):
-        print command 
+        print "Executing %s..." % (command)
         p.send_now("G1 Z60 Y90 X110")
     elif ( command == "northwest" ):
-        print command
+        print "Executing %s..." % (command)
         p.send_now("G1 Z60 Y110 X90")
     elif ( command == "southeast" ):
-        print command
+        print "Executing %s..." % (command)
         p.send_now("G1 Z100 Y50 X70")
     elif ( command == "southwest" ):
-        print command
+        print "Executing %s..." % (command)
         p.send_now("G1 Z100 Y70 X50")
 
     elif ( command == "home" ):
+        print "Executing %s..." % (command)
         p.send_now("G28")
 
     elif ( command == "disconnect" ):
-        print command
-        #print "Disconnecting from robot..."
+        c.send("Disconnecting from robot...")
         p.disconnect()
     else:
-        socket.send("Command not found\n");
+        socket.send("\nCommand not found...");
 
 ## Receiver function to handle a client's input
 #
-# Run this function in a separate  thread to implement 
+# Run this function in a separate thread to implement 
 # asynchronous client/server communication.
 def receiver( socket ):
     while True:
@@ -102,7 +102,7 @@ def receiver( socket ):
             input = socket.recv(1024)
             # Srip string of a newline
             input = input.strip( '\n' )
-            print "Recieved: %s\n" % (input)
+            print "\nRecieved: %s" % (input)
             if ( input == "exit" ):
                 p.disconnect()
                 socket.close()
@@ -131,58 +131,68 @@ def receiver( socket ):
 def sigintHandler(signum, frame):
     p.disconnect()
     s.close()
-    c.close()
+    print "\nServer closed.\n"
     sys.exit(1)
+
+
 
 ######################################################
 # Begin script with logging to stderr and binding to a 
 # socket on port 43000.  If a client connects, try and
 # connect to a printer.
+if __name__ == "__main__":
+    signal.signal(signal.SIGINT, sigintHandler)
 
-# Initialize sigint handler
-signal.signal(signal.SIGINT, sigintHandler)
+    setup_logging(sys.stderr)
 
-# Setup logging to stderr
-setup_logging(sys.stderr)
+    p = printcore()
 
-# Initialize printcore
-p = printcore()
+    s = socket.socket() 
+    host = '0.0.0.0' 
+    port = 43000              
 
-s = socket.socket()         # Create a socket object
-host = '0.0.0.0' 
-port = 43000              
-
-try:
-    # Setup a stream socket with the host and port specified above.
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind((host,port))         # Bind to the port
-except Exception,e:
-    print "Failed to bind socket to ", port
-    print str(e)
-    s.close()
-    sys.exit(1)
-
-s.listen(5)                 # Now wait for client connection
-print "%s listening on port %s" % (host, port)
-
-while True :
-    c, addr = s.accept()    # Establish connection with client
-    print "Got connection from ", c
-
-    #######   Connect to the printer  #########
     try:
-        p.connect('/dev/ttyACM0', 115200)
+        # Setup a stream socket with the host and port specified above.
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.bind((host,port))         # Bind to the port
     except Exception,e:
+        print "Failed to bind socket to ", port
         print str(e)
+        s.close()
+        sys.exit(1)
+
+    s.listen(5)                 
+    print "%s listening on port %s\n" % (host, port)
+
+    while True :
+        c, addr = s.accept()    
+        print "Got connection from %s\n" % (addr,)
+
+        # Now let's attempt to connect to the printer
         try:
-            p = printcore('/dev/ttyACM1', 115200)
-        except Exception,e2:    
-            print "No printer connected, now in debugging mode."
+            p.connect('/dev/ttyACM0', 115200)
+        except:
+            pass
+        # If the above fails and the printer is still offline
+        if p.online is False:
+            print "\n"
+            try:
+                p.connect('/dev/ttyACM1', 115200)
+            except:    
+                pass
+        # Use debug mode to test client/server communication
+        if p.online is False:
+            print "\nEntering debug mode.\n"
+            c.send("Did not connect to a printer, entering debug mode.\n")
 
-    time.sleep(2)   # Wait for printer to connect
+        print "\n"
 
-    thread.start_new_thread( receiver, ( c, ) ) # Begin receiver thread
-    c.send("Server awaiting commands...\n")
-    p.send_now("G28 X Y Z")
-    p.send_now("G1 Z80 Y80 X80")
+        time.sleep(2)   # Wait for printer to connect
+
+        thread.start_new_thread( receiver, ( c, ) )
+
+        c.send("Server awaiting commands...\n")
+        if p.online is True:
+            p.send_now("G28 X Y Z")
+            p.send_now("G1 Z80 Y80 X80")
 
